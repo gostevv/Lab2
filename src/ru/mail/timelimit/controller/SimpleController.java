@@ -336,7 +336,10 @@ public class SimpleController implements Controller, PropertyChangeListener
                     }
                     else
                     {
-                        model = newModel;
+						if (newModel != null)
+						{
+							model = newModel;
+						}
                     }
                 }
             }
