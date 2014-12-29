@@ -62,7 +62,7 @@ class ChapterAddForm
         });  
     }
 
-    public void show()
+    void show()
     {
         if (!dialog.isVisible())
         {

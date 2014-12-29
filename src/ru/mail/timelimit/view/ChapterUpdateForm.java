@@ -56,7 +56,7 @@ class ChapterUpdateForm
         });  
     }
 
-    public void show(int bookIdOfChapterAsInt, String chapterTitleAsString, String chapterTextAsString)
+    void show(int bookIdOfChapterAsInt, String chapterTitleAsString, String chapterTextAsString)
     {
         if (!dialog.isVisible())
         {
@@ -67,7 +67,7 @@ class ChapterUpdateForm
         }
     }
     
-    public void hide()
+    void hide()
     {
         dialog.setVisible(false);
     }

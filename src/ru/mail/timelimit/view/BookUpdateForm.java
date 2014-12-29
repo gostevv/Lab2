@@ -62,7 +62,7 @@ class BookUpdateForm
         });  
     }
 
-    public void show(String bookTitleAsString, String bookAuthorAsString, String bookIsbnAsString, String bookAnnotationAsString)
+    void show(String bookTitleAsString, String bookAuthorAsString, String bookIsbnAsString, String bookAnnotationAsString)
     {
         if (!dialog.isVisible())
         {
@@ -74,7 +74,7 @@ class BookUpdateForm
         }
     }
 
-    public void hide()
+    void hide()
     {
         dialog.setVisible(false);
     }
