@@ -4,6 +4,8 @@ import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import ru.mail.timelimit.exceptions.BeanAlreadyExistsException;
 import ru.mail.timelimit.exceptions.BeanNotFoundException;
+import ru.mail.timelimit.model.javabeans.Book;
+import ru.mail.timelimit.model.javabeans.Chapter;
 
 public interface Model extends Serializable
 {
@@ -14,4 +16,6 @@ public interface Model extends Serializable
     public void deleteBook(int bookId) throws BeanNotFoundException;
     public void deleteChapter(int chapterId) throws BeanNotFoundException;
     public void addListener(PropertyChangeListener propertyChangeListener);
+    public Book getBook(int bookId);
+    public Chapter getChapter(int chapterId);
 }

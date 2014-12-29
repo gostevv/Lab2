@@ -13,27 +13,36 @@ public interface View
     public JMenuItem getLoadBooksAndChapters();
     
     public JButton getAddBook();
-    public JButton getUpdateBook();
-    /* Book fields */
-    public JTextField getBookAnnotation();
-    public JTextField getBookId();
-    public JTextField getBookTitle();
-    public JTextField getBookIsbn();
-    public JTextField getBookAuthor();
-
+    public JTextField getAddBookAnnotation();
+    public JTextField getAddBookId();
+    public JTextField getAddBookTitle();
+    public JTextField getAddBookIsbn();
+    public JTextField getAddBookAuthor();
+    
     public JButton getAddChapter();
+    public JTextField getAddChapterId();
+    public JTextField getAddBookIdOfChapter();
+    public JTextField getAddChapterTitle();
+    public JTextField getAddChapterText();
+    
+    public JButton getUpdate();
+    
+    public JButton getUpdateBook();
+    public void showUpdateBookDialog(String bookTitle, String bookAuthor, String bookIsbn, String bookAnnotation);
+    public void hideUpdateBookDialog();
+    public JTextField getUpdateBookAnnotation();
+    public JTextField getUpdateBookTitle();
+    public JTextField getUpdateBookIsbn();
+    public JTextField getUpdateBookAuthor();
+    
     public JButton getUpdateChapter();
-    /* Chapter fields */
-    public JTextField getChapterId();
-    public JTextField getBookIdOfChapter();
-    public JTextField getChapterTitle();
-    public JTextField getChapterText();
+    public void showUpdateChapterDialog(int bookIdOfChapter, String chapterTitle, String chapterText);
+    public void hideUpdateChapterDialog();
+    public JTextField getUpdateBookIdOfChapter();
+    public JTextField getUpdateChapterTitle();
+    public JTextField getUpdateChapterText();
     
-    public JButton getDeleteChapter();
-    public JTextField getDeleteChapterId();
-    
-    public JButton getDeleteBook();
-    public JTextField getDeleteBookId();
+    public JButton getDelete();
     
     public void showErrorMessage(String errorMessage);
 }

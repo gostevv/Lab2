@@ -2,8 +2,7 @@ package ru.mail.timelimit.model.javabeans;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.HashSet;
 
 public class Book implements Serializable
 {
@@ -15,6 +14,16 @@ public class Book implements Serializable
         this.author = author;
         this.isbn = isbn;
         this.annotation = annotation;
+    }
+    
+    Book(int bookId, String title, String author, String isbn, String annotation, Collection<Chapter> chapters)
+    {
+        this.bookId = bookId;
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.annotation = annotation;
+        this.chapters = chapters;
     }
     
     public String getAnnotation() 
@@ -49,7 +58,7 @@ public class Book implements Serializable
 
     public Collection<Chapter> getChapters() 
     {
-        Collection<Chapter> chaptersDefensiveCopy = new LinkedList<>(chapters);
+        Collection<Chapter> chaptersDefensiveCopy = new HashSet<>(chapters);
         return chaptersDefensiveCopy;
     }
 
@@ -112,7 +121,7 @@ public class Book implements Serializable
     @Override
     public String toString() 
     {
-        return "Book{" + "bookId=" + bookId + ", title=" + title + ", author=" + author + ", isbn=" + isbn + ", annotation=" + annotation + ", chapters=" + chapters + '}';
+        return "Book{" + "bookId=" + bookId + ", title=" + title + ", author=" + author + ", isbn=" + isbn + ", annotation=" + annotation + '}';
     }
 
     private int bookId;
@@ -120,6 +129,6 @@ public class Book implements Serializable
     private String author;
     private String isbn;
     private String annotation;
-    private Collection<Chapter> chapters = new LinkedList<>();
+    private Collection<Chapter> chapters = new HashSet<>();
     private static final long serialVersionUID = 1L;
 }

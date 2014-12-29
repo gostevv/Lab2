@@ -7,8 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
-import ru.mail.timelimit.view.utils.SpringUtilities;
 
 public class SimpleView implements View
 {
@@ -34,103 +32,79 @@ public class SimpleView implements View
     @Override
     public JButton getAddBook() 
     {
-        return bookForm.addBook;
+        return bookAddForm.addBook;
     }
 
     @Override
-    public JTextField getBookAnnotation() 
+    public JTextField getAddBookAnnotation() 
     {
-        return bookForm.bookAnnotation;
+        return bookAddForm.bookAnnotation;
     }
 
     @Override
-    public JTextField getBookId() 
+    public JTextField getAddBookId() 
     {
-        return bookForm.bookId;
+        return bookAddForm.bookId;
     }
 
     @Override
-    public JTextField getBookTitle() 
+    public JTextField getAddBookTitle() 
     {
-        return bookForm.bookTitle;
+        return bookAddForm.bookTitle;
     }
 
     @Override
-    public JTextField getBookAuthor() 
+    public JTextField getAddBookAuthor() 
     {
-        return bookForm.bookAuthor;
+        return bookAddForm.bookAuthor;
     }
     
     @Override
-    public JTextField getBookIsbn()
+    public JTextField getAddBookIsbn()
     {
-        return bookForm.bookIsbn;
+        return bookAddForm.bookIsbn;
     }
 
     @Override
     public JButton getAddChapter() 
     {
-        return chapterForm.addChapter;
+        return chapterAddForm.addChapter;
     }
 
     @Override
-    public JTextField getChapterId() 
+    public JTextField getAddChapterId() 
     {
-        return chapterForm.chapterId;
+        return chapterAddForm.chapterId;
     }
 
     @Override
-    public JTextField getBookIdOfChapter() 
+    public JTextField getAddBookIdOfChapter() 
     {
-        return chapterForm.bookIdOfChapter;
+        return chapterAddForm.bookIdOfChapter;
     }
 
     @Override
-    public JTextField getChapterTitle() 
+    public JTextField getAddChapterTitle() 
     {
-        return chapterForm.chapterTitle;
+        return chapterAddForm.chapterTitle;
     }
 
     @Override
-    public JTextField getChapterText() 
+    public JTextField getAddChapterText() 
     {
-        return chapterForm.chapterText;
+        return chapterAddForm.chapterText;
     }
 
     @Override
-    public JButton getUpdateBook() 
+    public JButton getUpdate() 
     {
-        return bookForm.updateBook;
+        return update;
     }
 
     @Override
-    public JButton getDeleteChapter()
+    public JButton getDelete()
     {
-        return deleteChapterForm.delete;
-    }
-            
-    @Override
-    public JTextField getDeleteChapterId()
-    {
-        return deleteChapterForm.chapterIdOrBookId;
-    }
-    
-    @Override
-    public JButton getDeleteBook()
-    {
-        return deleteBookForm.delete;
-    }
-    
-    @Override
-    public JTextField getDeleteBookId()
-    {
-        return deleteBookForm.chapterIdOrBookId;
-    }
-    
-    @Override
-    public JButton getUpdateChapter() 
-    {
-        return chapterForm.updateChapter;
+        return delete;
     }
     
     @Override
@@ -139,16 +113,92 @@ public class SimpleView implements View
         JOptionPane.showMessageDialog(frame, errorMessage);
     }
     
+    @Override
+    public JTextField getUpdateBookAnnotation() 
+    {
+        return bookUpdateForm.bookAnnotation;
+    }
+
+    @Override
+    public JTextField getUpdateBookTitle() 
+    {
+        return bookUpdateForm.bookTitle;
+    }
+
+    @Override
+    public JTextField getUpdateBookIsbn() 
+    {
+        return bookUpdateForm.bookIsbn;
+    }
+
+    @Override
+    public JTextField getUpdateBookAuthor() 
+    {
+        return bookUpdateForm.bookAuthor;
+    }
+
+    @Override
+    public JTextField getUpdateBookIdOfChapter() 
+    {
+        return chapterUpdateForm.bookIdOfChapter;
+    }
+
+    @Override
+    public JTextField getUpdateChapterTitle() 
+    {
+        return chapterUpdateForm.chapterTitle;
+    }
+
+    @Override
+    public JTextField getUpdateChapterText() 
+    {
+        return chapterUpdateForm.chapterText;
+    }
+
+    @Override
+    public void showUpdateBookDialog(String bookTitle, String bookAuthor, String bookIsbn, String bookAnnotation)
+    {
+        bookUpdateForm.show(bookTitle, bookAuthor, bookIsbn, bookAnnotation);
+    }
+    
+    @Override
+    public void showUpdateChapterDialog(int bookIdOfChapter, String chapterTitle, String chapterText)
+    {
+        chapterUpdateForm.show(bookIdOfChapter, chapterTitle, chapterText);
+    }
+    
+    @Override
+    public JButton getUpdateBook() 
+    {
+        return bookUpdateForm.updateBook;
+    }
+    
+    @Override
+    public JButton getUpdateChapter() 
+    {
+        return chapterUpdateForm.updateChapter;
+    }
+    
+    @Override
+    public void hideUpdateBookDialog()
+    {
+        bookUpdateForm.hide();
+    }
+    
+    @Override
+    public void hideUpdateChapterDialog()
+    {
+        chapterUpdateForm.hide();
+    }
+
     public SimpleView()
     {
         DefaultMutableTreeNode treeTop = new DefaultMutableTreeNode("Книги");
         booksAndChapters = new JTree(treeTop);
         addBook = new JButton("Добавить книгу");
         addChapter = new JButton("Добавить главу");
-        deleteBook = new JButton("Удалить книгу");
-        deleteChapter = new JButton("Удалить главу");
-        editBook = new JButton("Редактировать книгу");
-        editChapter = new JButton("Редактировать главу");
+        update = new JButton("Изменить");
+        delete = new JButton("Удалить");
 
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Операции");
@@ -168,10 +218,8 @@ public class SimpleView implements View
         JPanel booksAndChaptersOperationsPanel = new JPanel();
         booksAndChaptersOperationsPanel.add(addBook);
         booksAndChaptersOperationsPanel.add(addChapter);
-        booksAndChaptersOperationsPanel.add(editBook);
-        booksAndChaptersOperationsPanel.add(editChapter);
-        booksAndChaptersOperationsPanel.add(deleteBook);
-        booksAndChaptersOperationsPanel.add(deleteChapter);
+        booksAndChaptersOperationsPanel.add(update);
+        booksAndChaptersOperationsPanel.add(delete);
         
         frame = new JFrame("Lab 2 - desktop application");
         frame.setLayout(new GridBagLayout());
@@ -195,10 +243,10 @@ public class SimpleView implements View
         frame.pack();
         frame.setVisible(true);
         
-        chapterForm = new ChapterForm();
-        bookForm = new BookForm();
-        deleteChapterForm = new DeleteForm();
-        deleteBookForm = new DeleteForm();
+        chapterAddForm = new ChapterAddForm(frame);
+        bookAddForm = new BookAddForm(frame);
+        chapterUpdateForm = new ChapterUpdateForm(frame);
+        bookUpdateForm = new BookUpdateForm(frame);
         
         addBook.addActionListener(new ActionListener() 
         {
@@ -206,7 +254,7 @@ public class SimpleView implements View
             @Override
             public void actionPerformed(ActionEvent event) 
             {
-                bookForm.show();
+                bookAddForm.show();
             }
         }); 
          
@@ -216,291 +264,21 @@ public class SimpleView implements View
             @Override
             public void actionPerformed(ActionEvent event) 
             {
-                chapterForm.show();
+                chapterAddForm.show();
             }
         });
-        
-        deleteChapter.addActionListener(new ActionListener() 
-        {
-
-            @Override
-            public void actionPerformed(ActionEvent event) 
-            {
-                deleteChapterForm.show();
-            }
-        });
-        
-        deleteBook.addActionListener(new ActionListener() 
-        {
-
-            @Override
-            public void actionPerformed(ActionEvent event) 
-            {
-                deleteBookForm.show();
-            }
-        });
-        
-        editBook.addActionListener(new ActionListener() 
-        {
-
-            @Override
-            public void actionPerformed(ActionEvent event) 
-            {
-                bookForm.show();
-            }
-        }); 
-        
-        editChapter.addActionListener(new ActionListener() 
-        {
-
-            @Override
-            public void actionPerformed(ActionEvent event) 
-            {
-                chapterForm.show();
-            }
-        });
-    }
-    
-    private class BookForm 
-    {
-
-        public BookForm()
-        {
-            frame = new JFrame("Книга");
-            JPanel panel = new JPanel(new SpringLayout());
-            
-            JLabel labelForBookId = new JLabel("ID: ", JLabel.TRAILING);
-            panel.add(labelForBookId);
-            bookId = new JTextField(10);
-            labelForBookId.setLabelFor(bookId);
-            panel.add(bookId);
-            
-            JLabel labelForBookTitle = new JLabel("Название: ", JLabel.TRAILING);
-            panel.add(labelForBookTitle);
-            bookTitle = new JTextField(10);
-            labelForBookTitle.setLabelFor(bookTitle);
-            panel.add(bookTitle);
-            
-            JLabel labelForBookAuthor = new JLabel("Автор: ", JLabel.TRAILING);
-            panel.add(labelForBookAuthor);
-            bookAuthor = new JTextField(10);
-            labelForBookAuthor.setLabelFor(bookAuthor);
-            panel.add(bookAuthor);
-            
-            JLabel labelForIsbn = new JLabel("ISBN: ", JLabel.TRAILING);
-            panel.add(labelForIsbn);
-            bookIsbn = new JTextField(10);
-            labelForIsbn.setLabelFor(bookIsbn);
-            panel.add(bookIsbn);
-            
-            JLabel labelForAnnotation = new JLabel("Аннотация: ", JLabel.TRAILING);
-            panel.add(labelForAnnotation);
-            bookAnnotation = new JTextField(10);
-            labelForAnnotation.setLabelFor(bookAnnotation);
-            panel.add(bookAnnotation);
-            
-            updateBook = new JButton("Обновить книгу");
-            addBook = new JButton("Добавить книгу");
-            panel.add(updateBook);
-            panel.add(addBook);
-            
-            JButton discard = new JButton("Отменить");
-            panel.add(discard);
-            
-            panel.add(Box.createHorizontalBox());
-            
-            SpringUtilities.makeCompactGrid(panel,
-                    7, 2,
-                    6, 6,        
-                    6, 6);       
-            
-            frame.setContentPane(panel);
-            
-            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-            frame.pack();
-            discard.addActionListener(new ActionListener()
-            {
-
-                @Override
-                public void actionPerformed(ActionEvent event) 
-                {
-                    frame.setVisible(false);
-                }
-            });  
-        }
-        
-        public void show()
-        {
-            if (!frame.isVisible())
-            {
-                frame.setVisible(true);
-                bookId.setText(EMPTY_STRING);
-                bookTitle.setText(EMPTY_STRING);
-                bookAuthor.setText(EMPTY_STRING);
-                bookIsbn.setText(EMPTY_STRING);
-                bookAnnotation.setText(EMPTY_STRING);
-            }
-        }
-        
-        final JTextField bookId;
-        final JTextField bookTitle;
-        final JTextField bookAuthor;
-        final JTextField bookIsbn;
-        final JTextField bookAnnotation;   
-        final JButton updateBook;
-        final JButton addBook;
-        final JFrame frame;
-        private static final String EMPTY_STRING = "";
-    }
-    
-    private class ChapterForm
-    {
-        public ChapterForm()
-        {
-            frame = new JFrame("Глава книги");
-            JPanel panel = new JPanel(new SpringLayout());
-                        
-            JLabel labelForChapterId = new JLabel("ID: ", JLabel.TRAILING);
-            panel.add(labelForChapterId);
-            chapterId = new JTextField(10);
-            labelForChapterId.setLabelFor(chapterId);
-            panel.add(chapterId);
-            
-            JLabel labelForBookId = new JLabel("ID книги:", JLabel.TRAILING);
-            panel.add(labelForBookId);
-            bookIdOfChapter = new JTextField(10);
-            labelForBookId.setLabelFor(bookIdOfChapter);
-            panel.add(bookIdOfChapter);
-            
-            JLabel labelForChapterTitle = new JLabel("Название: ", JLabel.TRAILING);
-            panel.add(labelForChapterTitle);
-            chapterTitle = new JTextField(10);
-            labelForChapterTitle.setLabelFor(chapterTitle);
-            panel.add(chapterTitle);
-            
-            JLabel labelForChapterText = new JLabel("Текст главы: ", JLabel.TRAILING);
-            panel.add(labelForChapterText);
-            chapterText = new JTextField(10);
-            labelForChapterText.setLabelFor(chapterText);
-            panel.add(chapterText);
-            
-            updateChapter = new JButton("Обновить главу");
-            addChapter = new JButton("Добавить главу");
-            panel.add(updateChapter);
-            panel.add(addChapter);
-            
-            JButton discard = new JButton("Отменить");
-            panel.add(discard);
-            panel.add(Box.createHorizontalBox());
-            
-            SpringUtilities.makeCompactGrid(panel,
-                    6, 2,
-                    6, 6,        
-                    6, 6);  
-            
-            frame.setContentPane(panel);
-            
-            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-            frame.pack();
-            discard.addActionListener(new ActionListener()
-            {
-
-                @Override
-                public void actionPerformed(ActionEvent event) 
-                {
-                    frame.setVisible(false);
-                }
-            });  
-        }
-        
-        public void show()
-        {
-            if (!frame.isVisible())
-            {
-                frame.setVisible(true);
-                chapterId.setText(EMPTY_STRING);
-                bookIdOfChapter.setText(EMPTY_STRING);
-                chapterTitle.setText(EMPTY_STRING);
-                chapterText.setText(EMPTY_STRING);
-            }
-        }
-        
-        final JButton updateChapter;
-        final JButton addChapter;
-        final JTextField chapterId;
-        final JTextField bookIdOfChapter;
-        final JTextField chapterTitle;
-        final JTextField chapterText;
-        final JFrame frame;
-        private static final String EMPTY_STRING = "";
-    }
-    
-    private class DeleteForm
-    {
-        public DeleteForm()
-        {
-            frame = new JFrame("Удаление");
-            JPanel panel = new JPanel(new SpringLayout());
-                        
-            JLabel labelForChapterIdOrBookId = new JLabel("ID: ", JLabel.TRAILING);
-            panel.add(labelForChapterIdOrBookId);
-            chapterIdOrBookId = new JTextField(10);
-            labelForChapterIdOrBookId.setLabelFor(chapterIdOrBookId);
-            panel.add(chapterIdOrBookId);
-            
-            delete = new JButton("Удалить");
-            JButton discard = new JButton("Отменить");
-            panel.add(delete);
-            panel.add(discard);
-            
-            SpringUtilities.makeCompactGrid(panel,
-                    2, 2,
-                    6, 6,        
-                    6, 6);  
-            
-            frame.setContentPane(panel);
-            
-            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-            frame.pack();
-            discard.addActionListener(new ActionListener()
-            {
-
-                @Override
-                public void actionPerformed(ActionEvent event) 
-                {
-                    frame.setVisible(false);
-                }
-            });  
-        }
-        
-        public void show()
-        {
-            if (!frame.isVisible())
-            {
-                frame.setVisible(true);
-                chapterIdOrBookId.setText(EMPTY_STRING);
-            }
-        }
-        
-        final JButton delete;
-        final JTextField chapterIdOrBookId;
-        final JFrame frame;
-        private static final String EMPTY_STRING = "";
     }
     
     private final JTree booksAndChapters;
     private final JButton addBook;
     private final JButton addChapter;
-    private final JButton deleteBook;
-    private final JButton deleteChapter;
-    private final JButton editBook;
-    private final JButton editChapter;
+    private final JButton delete;
+    private final JButton update;
     private final JMenuItem saveBooksAndChapters;
     private final JMenuItem loadBooksAndChapters;
-    private TreeNode selected;
     private final JFrame frame;
-    private final ChapterForm chapterForm;
-    private final BookForm bookForm;
-    private final DeleteForm deleteChapterForm;
-    private final DeleteForm deleteBookForm;
+    private final ChapterAddForm chapterAddForm;
+    private final BookAddForm bookAddForm;
+    private final ChapterUpdateForm chapterUpdateForm;
+    private final BookUpdateForm bookUpdateForm;
 }

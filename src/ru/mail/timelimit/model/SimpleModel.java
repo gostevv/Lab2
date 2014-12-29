@@ -40,7 +40,7 @@ public class SimpleModel implements Model
             throw new BeanNotFoundException("Попытка вставить главу ссылающуюся на несуществующую книгу с Id " + bookId);
         }
         
-        Chapter chapter = new Chapter(chapterId, bookId, title, chapterText);
+        Chapter chapter = new Chapter(chapterId, idToBook.get(bookId), title, chapterText);
         idToChapter.put(chapterId, chapter);
         
         Book book = idToBook.get(bookId);
@@ -107,7 +107,7 @@ public class SimpleModel implements Model
         
         Chapter chapter = idToChapter.remove(chapterId);
         
-        Book book = idToBook.get(chapter.getBookId());
+        Book book = chapter.getBook();
         Collection<Chapter> bookChapters = book.getChapters();
         bookChapters.remove(chapter); 
         book.setChapters(bookChapters);
@@ -120,6 +120,18 @@ public class SimpleModel implements Model
     { 
         propertyChangeCaller = new SwingPropertyChangeSupport(this);
         propertyChangeCaller.addPropertyChangeListener(propertyChangeListener);
+    }
+    
+    @Override
+    public Book getBook(int bookId)
+    {
+        return idToBook.get(bookId);
+    }
+    
+    @Override
+    public Chapter getChapter(int chapterId)
+    {
+        return idToChapter.get(chapterId);
     }
     
     public void destroyModel()

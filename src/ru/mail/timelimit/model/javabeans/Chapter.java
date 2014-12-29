@@ -5,22 +5,27 @@ import java.io.Serializable;
 public class Chapter implements Serializable
 {
 
-    public Chapter(int chapterId, int bookId, String title, String chapterText)
+    public Chapter(int chapterId, Book book, String title, String chapterText)
     {
         this.chapterId = chapterId;
-        this.bookId = bookId;
+        this.book = book;
         this.title = title;
         this.chapterText = chapterText;
-    }
+    } 
     
-    public int getBookId() 
+    public Book getBook() 
     {
-        return bookId;
+        return new Book(book.getBookId(), 
+                book.getTitle(), 
+                book.getAuthor(), 
+                book.getIsbn(), 
+                book.getAnnotation(), 
+                book.getChapters());
     }
 
-    public void setBookId(int bookId) 
+    public void setBook(Book book) 
     {
-        this.bookId = bookId;
+        this.book = book;
     }
 
     public int getChapterId() 
@@ -88,12 +93,12 @@ public class Chapter implements Serializable
     @Override
     public String toString() 
     {
-        return "Chapter{" + "chapterId=" + chapterId + ", bookId=" + bookId + ", title=" + title + ", chapterText=" + chapterText + '}';
+        return "Chapter{" + "chapterId=" + chapterId + ", bookId=" + book.getBookId() + ", title=" + title + ", chapterText=" + chapterText + '}';
     }
     
     private int chapterId;
-    private int bookId;
+    private Book book;
     private String title;
     private String chapterText;
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 }

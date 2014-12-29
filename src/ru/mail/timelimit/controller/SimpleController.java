@@ -32,14 +32,14 @@ public class SimpleController implements Controller, PropertyChangeListener
             @Override
             public void actionPerformed(ActionEvent event) 
             {
-                String bookIdAsString = view.getBookId().getText();
+                String bookIdAsString = view.getAddBookId().getText();
                 try
                 {
                     int bookId = Integer.parseInt(bookIdAsString);
-                    String bookTitle = view.getBookTitle().getText();
-                    String bookAuthor = view.getBookAuthor().getText();
-                    String bookIsbn = view.getBookIsbn().getText();
-                    String bookAnnotation = view.getBookAnnotation().getText();
+                    String bookTitle = view.getAddBookTitle().getText();
+                    String bookAuthor = view.getAddBookAuthor().getText();
+                    String bookIsbn = view.getAddBookIsbn().getText();
+                    String bookAnnotation = view.getAddBookAnnotation().getText();
                     try
                     {
                         model.addBook(bookId, bookTitle, bookAuthor, bookIsbn, bookAnnotation);
@@ -64,7 +64,7 @@ public class SimpleController implements Controller, PropertyChangeListener
             @Override
             public void actionPerformed(ActionEvent event) 
             {
-                String chapterIdAsString = view.getChapterId().getText();
+                String chapterIdAsString = view.getAddChapterId().getText();
                 int chapterId = -1;
                 try
                 {
@@ -77,7 +77,7 @@ public class SimpleController implements Controller, PropertyChangeListener
                 
                 if (chapterId != -1)
                 {
-                    String bookIdOfChapterIdAsString = view.getBookIdOfChapter().getText();
+                    String bookIdOfChapterIdAsString = view.getAddBookIdOfChapter().getText();
                     int bookIdOfChapterId = -1; 
                     try
                     {
@@ -90,8 +90,8 @@ public class SimpleController implements Controller, PropertyChangeListener
 
                     if (bookIdOfChapterId != -1)
                     {
-                        String chapterTitle = view.getChapterTitle().getText();
-                        String chapterText = view.getChapterText().getText();
+                        String chapterTitle = view.getAddChapterTitle().getText();
+                        String chapterText = view.getAddChapterText().getText();
                         try
                         {
                             model.addChapter(chapterId, bookIdOfChapterId, chapterTitle, chapterText);
@@ -108,36 +108,69 @@ public class SimpleController implements Controller, PropertyChangeListener
             private static final String BOOK_ID_NOT_NUMBER_EXCEPTION_MESSAGE = "Id книги обязано быть числом";
         });
         
+        view.getUpdate().addActionListener(new ActionListener() 
+        {
+
+            @Override
+            public void actionPerformed(ActionEvent event) 
+            {
+                DefaultMutableTreeNode selected = (DefaultMutableTreeNode)
+                        view.getBooksAndChapters().getLastSelectedPathComponent();
+                
+                if (selected == null)
+                {
+                    view.showErrorMessage(OBJECT_FOR_UPDATE_NOT_SPECIFIED_EXCEPTION_MESSAGE);
+                }
+                else
+                {
+                    Integer bookId = treeNodeToBookId.get(selected);
+                    if (bookId != null)
+                    {
+                        Book book = model.getBook(bookId);
+                        view.showUpdateBookDialog(book.getTitle(), book.getAuthor(), book.getIsbn(), book.getAnnotation());
+                    }
+                    else
+                    {
+                        Integer chapterId = treeNodeToChapterId.get(selected);
+                        if (chapterId != null)
+                        {
+                            Chapter chapter = model.getChapter(chapterId);
+                            view.showUpdateChapterDialog(chapter.getBook().getBookId(), chapter.getTitle(), chapter.getChapterText());
+                        }
+                        else
+                        {
+                            view.showErrorMessage(OBJECT_FOR_UPDATE_IS_UNKNOWN_EXCEPTION_MESSAGE);
+                        }
+                    } 
+                }   
+            }
+            private static final String OBJECT_FOR_UPDATE_NOT_SPECIFIED_EXCEPTION_MESSAGE = "Выберите, пожалуйста, сначала элемент дерева";
+            private static final String OBJECT_FOR_UPDATE_IS_UNKNOWN_EXCEPTION_MESSAGE = "Выбранный элемент дерева не является ни книгой, ни главой";
+        });
+        
         view.getUpdateBook().addActionListener(new ActionListener() 
         {
 
             @Override
             public void actionPerformed(ActionEvent event) 
             {
-                String bookIdAsString = view.getBookId().getText();
+                DefaultMutableTreeNode selected = (DefaultMutableTreeNode)
+                        view.getBooksAndChapters().getLastSelectedPathComponent();
+                Integer bookId = treeNodeToBookId.get(selected);
+                String bookTitle = view.getUpdateBookTitle().getText();
+                String bookAuthor = view.getUpdateBookAuthor().getText();
+                String bookIsbn = view.getUpdateBookIsbn().getText();
+                String bookAnnotation = view.getUpdateBookAnnotation().getText();
                 try
                 {
-                    int bookId = Integer.parseInt(bookIdAsString);
-                    String bookTitle = view.getBookTitle().getText();
-                    String bookAuthor = view.getBookAuthor().getText();
-                    String bookIsbn = view.getBookIsbn().getText();
-                    String bookAnnotation = view.getBookAnnotation().getText();
-                    try
-                    {
-                        model.updateBook(bookId, bookTitle, bookAuthor, bookIsbn, bookAnnotation);
-                    }
-                    catch(BeanNotFoundException exception)
-                    {
-                        view.showErrorMessage(exception.getMessage());
-                    }
+                    model.updateBook(bookId, bookTitle, bookAuthor, bookIsbn, bookAnnotation);
+                    view.hideUpdateBookDialog();
                 }
-                catch (NumberFormatException exception)
+                catch(BeanNotFoundException exception)
                 {
-                    view.showErrorMessage(BOOK_ID_NOT_NUMBER_EXCEPTION_MESSAGE);
-                } 
-            } 
-            
-            private static final String BOOK_ID_NOT_NUMBER_EXCEPTION_MESSAGE = "Id книги обязано быть числом";
+                    view.showErrorMessage(exception.getMessage());
+                }
+            }
         });
         
         view.getUpdateChapter().addActionListener(new ActionListener() 
@@ -146,98 +179,83 @@ public class SimpleController implements Controller, PropertyChangeListener
             @Override
             public void actionPerformed(ActionEvent event) 
             {
-                String chapterIdAsString = view.getChapterId().getText();
-                int chapterId = -1;
-                try
-                {
-                     chapterId = Integer.parseInt(chapterIdAsString);
-                }
-                catch (NumberFormatException exception)
-                {
-                    view.showErrorMessage(CHAPTER_ID_NOT_NUMBER_EXCEPTION_MESSAGE);
-                } 
+                DefaultMutableTreeNode selected = (DefaultMutableTreeNode)
+                        view.getBooksAndChapters().getLastSelectedPathComponent();
+                Integer chapterId = treeNodeToChapterId.get(selected);
                 
-                if (chapterId != -1)
-                {
-                    String bookIdOfChapterIdAsString = view.getBookIdOfChapter().getText();
-                    int bookIdOfChapterId = -1; 
-                    try
-                    {
-                        bookIdOfChapterId = Integer.parseInt(bookIdOfChapterIdAsString);
-                    }
-                    catch (NumberFormatException exception)
-                    {
-                        view.showErrorMessage(BOOK_ID_NOT_NUMBER_EXCEPTION_MESSAGE);
-                    } 
-
-                    if (bookIdOfChapterId != -1)
-                    {
-                        String chapterTitle = view.getChapterTitle().getText();
-                        String chapterText = view.getChapterText().getText();
-                        try
-                        {
-                            model.updateChapter(chapterId, bookIdOfChapterId, chapterTitle, chapterText);
-                        }
-                        catch(BeanNotFoundException exception)
-                        {
-                            view.showErrorMessage(exception.getMessage());
-                        }
-                    }
-                }
-            } 
-            
-            private static final String CHAPTER_ID_NOT_NUMBER_EXCEPTION_MESSAGE = "Id главы обязано быть числом";
-            private static final String BOOK_ID_NOT_NUMBER_EXCEPTION_MESSAGE = "Id книги обязано быть числом";
-        });
-        
-        view.getDeleteBook().addActionListener(new ActionListener() 
-        {
-
-            @Override
-            public void actionPerformed(ActionEvent event) 
-            {
+                String bookIdOfChapterIdAsString = view.getUpdateBookIdOfChapter().getText();
+                int bookIdOfChapterId = -1; 
                 try
                 {
-                    String bookIdAsString = view.getDeleteBookId().getText();
-                    int bookId = Integer.parseInt(bookIdAsString);
-                    model.deleteBook(bookId);
+                    bookIdOfChapterId = Integer.parseInt(bookIdOfChapterIdAsString);
                 }
                 catch (NumberFormatException exception)
                 {
                     view.showErrorMessage(BOOK_ID_NOT_NUMBER_EXCEPTION_MESSAGE);
                 } 
-                catch (BeanNotFoundException exception)
+
+                if (bookIdOfChapterId != -1)
                 {
-                    view.showErrorMessage(exception.getMessage());
+                    String chapterTitle = view.getUpdateChapterTitle().getText();
+                    String chapterText = view.getUpdateChapterText().getText();
+                    try
+                    {
+                        model.updateChapter(chapterId, bookIdOfChapterId, chapterTitle, chapterText);
+                        view.hideUpdateChapterDialog();
+                    }
+                    catch(BeanNotFoundException exception)
+                    {
+                        view.showErrorMessage(exception.getMessage());
+                    }
                 }
-            }
+            } 
             
             private static final String BOOK_ID_NOT_NUMBER_EXCEPTION_MESSAGE = "Id книги обязано быть числом";
         });
         
-        view.getDeleteChapter().addActionListener(new ActionListener() 
+        view.getDelete().addActionListener(new ActionListener() 
         {
 
             @Override
             public void actionPerformed(ActionEvent event) 
             {
-                try
+                DefaultMutableTreeNode selected = (DefaultMutableTreeNode)
+                        view.getBooksAndChapters().getLastSelectedPathComponent();
+                
+                if (selected == null)
                 {
-                    String chapterIdAsString = view.getDeleteChapterId().getText();
-                    int chapterId = Integer.parseInt(chapterIdAsString);
-                    model.deleteChapter(chapterId);
+                    view.showErrorMessage(OBJECT_FOR_UPDATE_NOT_SPECIFIED_EXCEPTION_MESSAGE);
                 }
-                catch (NumberFormatException exception)
+                else
                 {
-                    view.showErrorMessage(CHAPTER_ID_NOT_NUMBER_EXCEPTION_MESSAGE);
-                } 
-                catch (BeanNotFoundException exception)
-                {
-                    view.showErrorMessage(exception.getMessage());
-                }
+                    try
+                    {
+                        Integer bookId = treeNodeToBookId.get(selected);
+                        if (bookId != null)
+                        {
+                            model.deleteBook(treeNodeToBookId.get(selected));
+                        }
+                        else
+                        {
+                            Integer chapterId = treeNodeToChapterId.get(selected);
+                            if (chapterId != null)
+                            {
+                                model.deleteChapter(treeNodeToChapterId.get(selected));
+                            }
+                            else
+                            {
+                                view.showErrorMessage(OBJECT_FOR_UPDATE_IS_UNKNOWN_EXCEPTION_MESSAGE);
+                            }
+                        }
+                    }
+                    catch (BeanNotFoundException exception)
+                    { 
+                        view.showErrorMessage(exception.getMessage());
+                    }
+                }   
             }
-            
-            private static final String CHAPTER_ID_NOT_NUMBER_EXCEPTION_MESSAGE = "Id главы обязано быть числом";
+            private static final String OBJECT_FOR_UPDATE_NOT_SPECIFIED_EXCEPTION_MESSAGE = "Выберите, пожалуйста, сначала элемент дерева";
+            private static final String OBJECT_FOR_UPDATE_IS_UNKNOWN_EXCEPTION_MESSAGE = "Выбранный элемент дерева не является ни книгой, ни главой";
         });
      
         view.getSaveBooksAndChapters().addActionListener(new ActionListener() 
@@ -336,10 +354,7 @@ public class SimpleController implements Controller, PropertyChangeListener
                     }
                     else
                     {
-						if (newModel != null)
-						{
-							model = newModel;
-						}
+                        model = newModel;
                     }
                 }
             }
@@ -378,6 +393,7 @@ public class SimpleController implements Controller, PropertyChangeListener
             Book book = (Book) event.getNewValue();
             final DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(book.toString());
             bookIdToTreeNode.put(book.getBookId(), treeNode); 
+            treeNodeToBookId.put(treeNode, book.getBookId());
             SwingUtilities.invokeLater(new Runnable() 
             {
 
@@ -397,6 +413,7 @@ public class SimpleController implements Controller, PropertyChangeListener
             final Chapter chapter = (Chapter) event.getNewValue();
             final DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(chapter.toString());
             chapterIdToTreeNode.put(chapter.getChapterId(), treeNode); 
+            treeNodeToChapterId.put(treeNode, chapter.getChapterId());
             SwingUtilities.invokeLater(new Runnable() 
             {
 
@@ -404,7 +421,7 @@ public class SimpleController implements Controller, PropertyChangeListener
                 public void run() 
                 {
                     JTree tree = view.getBooksAndChapters();
-                    DefaultMutableTreeNode bookNode = bookIdToTreeNode.get(chapter.getBookId());
+                    DefaultMutableTreeNode bookNode = bookIdToTreeNode.get(chapter.getBook().getBookId());
                     bookNode.add(treeNode);
                     DefaultTreeModel treeModel = (DefaultTreeModel) tree.getModel();
                     treeModel.reload(bookNode);
@@ -415,6 +432,7 @@ public class SimpleController implements Controller, PropertyChangeListener
         {
             final Chapter oldChapter = (Chapter) event.getOldValue();
             final DefaultMutableTreeNode chapterTreeNode = chapterIdToTreeNode.remove(oldChapter.getChapterId());
+            treeNodeToChapterId.remove(chapterTreeNode);
             SwingUtilities.invokeLater(new Runnable() 
             {
 
@@ -434,6 +452,7 @@ public class SimpleController implements Controller, PropertyChangeListener
         {
             final Book oldBook = (Book) event.getOldValue();
             final DefaultMutableTreeNode bookTreeNode = bookIdToTreeNode.remove(oldBook.getBookId());
+            treeNodeToBookId.remove(bookTreeNode);
             SwingUtilities.invokeLater(new Runnable() 
             {
 
@@ -462,4 +481,6 @@ public class SimpleController implements Controller, PropertyChangeListener
     private Model model;
     private final Map<Integer, DefaultMutableTreeNode> bookIdToTreeNode = new HashMap<>();
     private final Map<Integer, DefaultMutableTreeNode> chapterIdToTreeNode = new HashMap<>();
+    private final Map<DefaultMutableTreeNode, Integer> treeNodeToBookId = new HashMap<>();
+    private final Map<DefaultMutableTreeNode, Integer> treeNodeToChapterId = new HashMap<>();
 }
